@@ -14,6 +14,7 @@ fn main() {
     let colors = replace_alacritty(&home_path, &selection);
     replace_polybar(&home_path, colors.to_owned());
     replace_rofi(&home_path, colors.to_owned());
+    replace_nvim_theme(&home_path, &selection);
 
     println!("Done!");
 }
@@ -168,6 +169,25 @@ fn replace_rofi(home_path: &str, colors: HashMap<String, String>) {
         string_to_find_selected_grey,
         &new_line_content,
     );
+}
+
+fn replace_nvim_theme(home_path: &str, selection: &str) {
+    let nvim_theme_path = format!("{}/.dotfiles/config/.config/nvim/lua/theme.lua", home_path);
+    let string_to_find_theme = "vim.cmd.colorscheme";
+
+    let theme = match selection {
+        "rose-pine-moon.yml" => "rose-pine",
+        "catppuccin.yml" => "catppuccin",
+        "dracula.yml" => "dracula",
+        "gruvbox-material.yml" => "gruvbox-material",
+        "gruvbox.yml" => "gruvbox",
+        "tokyo-night.yml" => "tokyonight-moon",
+        "nord.yml" => "nord",
+        _ => "",
+    };
+
+    let new_line_content = format!("vim.cmd.colorscheme \"{}\"", theme);
+    change_config_value(&nvim_theme_path, string_to_find_theme, &new_line_content);
 }
 
 fn save_file(file_path: &str, content: String) {
