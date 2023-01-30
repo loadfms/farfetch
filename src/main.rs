@@ -46,23 +46,11 @@ fn show_options(home_path: &str) -> String {
 fn replace_alacritty(home_path: &str, selection: &str) -> HashMap<String, String> {
     let alacritty_path = format!("{}/.alacritty.yml", home_path);
     let string_to_find = "~/.alacrittythemes/";
+    let new_line_content = format!(" - {}{}", string_to_find, selection);
 
-    let mut file = File::open(alacritty_path.clone()).expect("Could not open file");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Could not read file");
-
-    let line_number = get_line_number(&contents, &string_to_find);
-    let new_line = format!(" - {}{}", string_to_find, selection);
-
-    contents = match line_number {
-        Some(line) => replace_line(&contents, line, &new_line),
-        None => "".to_string(),
-    };
+    change_config_value(&alacritty_path, string_to_find, &new_line_content);
 
     let result = get_theme_colors(&format!("{}/.alacrittythemes/{}", &home_path, &selection));
-
-    save_file(&alacritty_path, contents);
 
     return result;
 }
@@ -283,19 +271,23 @@ fn get_line_text(text: &str, line_number: usize) -> Option<String> {
 }
 
 fn change_config_value(file_path: &str, string_to_find: &str, new_line_content: &str) {
-    let mut file = File::open(file_path.clone()).expect("Could not open file");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Could not read file");
+    let contents = load_file(file_path);
 
-    let line_number = get_line_number(&contents, &string_to_find);
+    match contents {
+        Ok(content) => {
+            let line_number = get_line_number(&content, &string_to_find);
 
-    let content = match line_number {
-        Some(line) => replace_line(&contents, line, &new_line_content),
-        None => "".to_string(),
-    };
+            let content = match line_number {
+                Some(line) => replace_line(&content, line, &new_line_content),
+                None => "".to_string(),
+            };
 
-    save_file(&file_path, content);
+            save_file(&file_path, content);
+        }
+        Err(_) => {
+            println!("Warning: file {} not found", file_path)
+        }
+    }
 }
 
 fn get_key_value(content: &str, key: &str) -> String {
@@ -304,6 +296,22 @@ fn get_key_value(content: &str, key: &str) -> String {
     let line_value = find_and_extract_word_in_quotes(line_text).unwrap();
 
     return line_value;
+}
+
+fn load_file(file_path: &str) -> Result<String, io::Error> {
+    let file = File::open(file_path);
+
+    let mut contents = String::new();
+    match file {
+        Ok(mut f) => {
+            f.read_to_string(&mut contents)?;
+            Ok(contents)
+        }
+        Err(error) => {
+            println!("File not found!");
+            Err(error)
+        }
+    }
 }
 
 fn print_welcome() {
