@@ -15,6 +15,7 @@ fn main() {
     replace_polybar(&home_path, colors.to_owned());
     replace_rofi(&home_path, colors.to_owned());
     replace_nvim_theme(&home_path, &selection);
+    replace_dunst(&home_path, colors.to_owned());
 
     println!("Done!");
 }
@@ -65,6 +66,26 @@ fn replace_polybar(home_path: &str, colors: HashMap<String, String>) {
 
     let new_line_content = format!("{}={}", string_to_find_fg, colors.get("fg").expect(""));
     change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
+}
+
+fn replace_dunst(home_path: &str, colors: HashMap<String, String>) {
+    let dunst_path = format!("{}/.config/dunst/dunstrc", home_path);
+    let string_to_find_bg = "background";
+    let string_to_find_fg = "foreground";
+
+    let new_line_content = format!(
+        "    {} = \"{}\"",
+        string_to_find_bg,
+        colors.get("bg").expect("")
+    );
+    change_config_value(&dunst_path, string_to_find_bg, &new_line_content);
+
+    let new_line_content = format!(
+        "    {} = \"{}\"",
+        string_to_find_fg,
+        colors.get("fg").expect("")
+    );
+    change_config_value(&dunst_path, string_to_find_fg, &new_line_content);
 }
 
 fn replace_rofi(home_path: &str, colors: HashMap<String, String>) {
