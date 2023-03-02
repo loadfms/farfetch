@@ -160,7 +160,7 @@ fn replace_rofi(home_path: &str, colors: HashMap<String, String>) {
 }
 
 fn replace_nvim_theme(home_path: &str, selection: &str) {
-    let nvim_theme_path = format!("{}/.dotfiles/config/.config/nvim/lua/theme.lua", home_path);
+    let nvim_theme_path = format!("{}/.config/nvim/lua/theme.lua", home_path);
     let string_to_find_theme = "vim.cmd.colorscheme";
 
     let theme = match selection {
@@ -170,6 +170,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "gruvbox-material.yml" => "gruvbox-material",
         "gruvbox.yml" => "gruvbox",
         "tokyo-night.yml" => "tokyonight-moon",
+        "kanagawa.yml" => "kanagawa",
         "nord.yml" => "nord",
         _ => "",
     };
