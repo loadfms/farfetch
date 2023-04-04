@@ -193,6 +193,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "tokyo-night.yml" => "tokyonight-moon",
         "kanagawa.yml" => "kanagawa",
         "nord.yml" => "nord",
+        "everforest.yml" => "everforest",
         _ => "",
     };
 
