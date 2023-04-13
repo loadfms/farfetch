@@ -11,8 +11,9 @@ fn main() {
     let home_path = env::var("HOME").expect("HOME not set");
 
     let selection = show_options(&home_path);
+    let polybar_theme_type = show_polybar_options();
     let colors = replace_alacritty(&home_path, &selection);
-    replace_polybar(&home_path, colors.to_owned());
+    replace_polybar(&home_path, colors.to_owned(), &polybar_theme_type);
     replace_rofi(&home_path, colors.to_owned());
     replace_nvim_theme(&home_path, &selection);
     replace_dunst(&home_path, colors.to_owned());
@@ -44,6 +45,20 @@ fn show_options(home_path: &str) -> String {
     }
 }
 
+fn show_polybar_options() -> usize {
+    println!("What kind of polybar do you want?");
+    println!("1. Follow theme colors.");
+    println!("2. Transparent black");
+    println!("3. Transparent white");
+
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read input");
+
+    return input.trim().parse().expect("Invalid option");
+}
+
 fn replace_alacritty(home_path: &str, selection: &str) -> HashMap<String, String> {
     let alacritty_path = format!("{}/.alacritty.yml", home_path);
     let string_to_find = "~/.alacrittythemes/";
@@ -56,16 +71,35 @@ fn replace_alacritty(home_path: &str, selection: &str) -> HashMap<String, String
     return result;
 }
 
-fn replace_polybar(home_path: &str, colors: HashMap<String, String>) {
+fn replace_polybar(home_path: &str, colors: HashMap<String, String>, theme_type: &usize) {
     let polybar_path = format!("{}/.config/polybar/config.ini", home_path);
     let string_to_find_bg = "background";
     let string_to_find_fg = "foreground";
 
-    let new_line_content = format!("{}={}", string_to_find_bg, colors.get("bg").expect(""));
-    change_config_value(&polybar_path, string_to_find_bg, &new_line_content);
+    match theme_type {
+        1 => {
+            let new_line_content = format!("{}={}", string_to_find_bg, colors.get("bg").expect(""));
+            change_config_value(&polybar_path, string_to_find_bg, &new_line_content);
 
-    let new_line_content = format!("{}={}", string_to_find_fg, colors.get("fg").expect(""));
-    change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
+            let new_line_content = format!("{}={}", string_to_find_fg, colors.get("fg").expect(""));
+            change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
+        }
+        2 => {
+            let new_line_content = format!("{}={}", string_to_find_bg, "#30000000");
+            change_config_value(&polybar_path, string_to_find_bg, &new_line_content);
+
+            let new_line_content = format!("{}={}", string_to_find_fg, "#eaeaea");
+            change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
+        }
+        3 => {
+            let new_line_content = format!("{}={}", string_to_find_bg, "#30eaeaea");
+            change_config_value(&polybar_path, string_to_find_bg, &new_line_content);
+
+            let new_line_content = format!("{}={}", string_to_find_fg, "#000000");
+            change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
+        }
+        _ => println!("Invalid selection: {}", theme_type),
+    }
 }
 
 fn replace_dunst(home_path: &str, colors: HashMap<String, String>) {
