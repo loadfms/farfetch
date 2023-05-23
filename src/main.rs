@@ -95,7 +95,7 @@ fn replace_polybar(home_path: &str, colors: HashMap<String, String>, theme_type:
             let new_line_content = format!("{}={}", string_to_find_bg, "#30eaeaea");
             change_config_value(&polybar_path, string_to_find_bg, &new_line_content);
 
-            let new_line_content = format!("{}={}", string_to_find_fg, "#000000");
+            let new_line_content = format!("{}={}", string_to_find_fg, "#eaeaea");
             change_config_value(&polybar_path, string_to_find_fg, &new_line_content);
         }
         _ => println!("Invalid selection: {}", theme_type),
