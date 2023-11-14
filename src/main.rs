@@ -271,7 +271,7 @@ fn replace_line(text: &str, line_number: usize, new_line: &str) -> String {
 
 fn get_theme_colors(selection: &str) -> HashMap<String, String> {
     let mut result = HashMap::new();
-    let mut file = File::open(selection.clone()).expect("Could not open file");
+    let mut file = File::open(selection).expect("Could not open file");
     let mut content = String::new();
 
     file.read_to_string(&mut content)
