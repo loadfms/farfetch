@@ -60,9 +60,12 @@ fn show_polybar_options() -> usize {
 }
 
 fn replace_alacritty(home_path: &str, selection: &str) -> HashMap<String, String> {
-    let alacritty_path = format!("{}/.alacritty.yml", home_path);
+    let alacritty_path = format!("{}/.alacritty.toml", home_path);
     let string_to_find = "~/.alacrittythemes/";
-    let new_line_content = format!(" - {}{}", string_to_find, selection);
+    let new_line_content = format!(
+        "import = [\"~/.alacrittythemes/{}\", \"~/.alacrittythemes/font.toml\"]",
+        selection
+    );
 
     change_config_value(&alacritty_path, string_to_find, &new_line_content);
 
@@ -219,15 +222,12 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
     let string_to_find_theme = "vim.cmd.colorscheme";
 
     let theme = match selection {
-        "rose-pine-moon.yml" => "rose-pine",
-        "catppuccin.yml" => "catppuccin",
-        "dracula.yml" => "dracula",
-        "gruvbox-material.yml" => "gruvbox-material",
-        "gruvbox.yml" => "gruvbox",
-        "tokyo-night.yml" => "tokyonight-moon",
-        "kanagawa.yml" => "kanagawa",
-        "nord.yml" => "nord",
-        "everforest.yml" => "everforest",
+        "rose-pine-moon.toml" => "rose-pine",
+        "catppuccin.toml" => "catppuccin",
+        "gruvbox.toml" => "gruvbox",
+        "tokyo-night.toml" => "tokyonight-moon",
+        "kanagawa.toml" => "kanagawa",
+        "everforest.toml" => "everforest",
         _ => "",
     };
 
