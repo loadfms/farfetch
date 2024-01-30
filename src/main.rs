@@ -126,7 +126,7 @@ fn replace_dunst(home_path: &str, colors: HashMap<String, String>) {
 }
 
 fn replace_rofi(home_path: &str, colors: HashMap<String, String>) {
-    let polybar_path = format!("{}/.local/share/rofi/themes/default.rafi", home_path);
+    let polybar_path = format!("{}/.config/rofi/default.rasi", home_path);
     let string_to_find_bg_col = "bg-col";
     let string_to_find_bg_col_light = "bg-col-light";
     let string_to_find_border_col = "border-col";
