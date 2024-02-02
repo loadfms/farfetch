@@ -16,6 +16,7 @@ fn main() {
     replace_polybar(&home_path, colors.to_owned(), &polybar_theme_type);
     replace_rofi(&home_path, colors.to_owned());
     replace_nvim_theme(&home_path, &selection);
+    replace_init_lua_theme(&home_path, &selection);
     replace_dunst(&home_path, colors.to_owned());
 
     println!("Done!");
@@ -233,6 +234,52 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
 
     let new_line_content = format!("vim.cmd.colorscheme \"{}\"", theme);
     change_config_value(&nvim_theme_path, string_to_find_theme, &new_line_content);
+}
+
+fn replace_init_lua_theme(home_path: &str, selection: &str) {
+    let init_lua_path = format!("{}/.config/nvim/lua/plugins/init.lua", home_path);
+    let string_to_find_anchor = "    --theme";
+
+    let contents = load_file(&init_lua_path);
+
+    match contents {
+        Ok(content) => {
+            let anchor_line_index = get_line_number(&content, &string_to_find_anchor);
+
+            if let Some(anchor_line_index) = anchor_line_index {
+                let theme_line_below_index = anchor_line_index + 1;
+                let theme_module = match selection {
+                    "gruvbox.toml" => {
+                        r#"    { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },"#
+                    }
+                    "rose-pine-moon.toml" => r#"{ "rose-pine/neovim", name = "rose-pine" },"#,
+                    "catppuccin.toml" => {
+                        r#"    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },"#
+                    }
+                    "tokyo-night.toml" => {
+                        r#"    { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {} },"#
+                    }
+                    "kanagawa.toml" => r#"    { "rebelot/kanagawa.nvim" },"#,
+                    "everforest.toml" => {
+                        r#"    {"neanias/everforest-nvim", version = false, lazy = false, priority = 1000 },"#
+                    }
+                    _ => {
+                        // Default case or handle other themes as needed
+                        ""
+                    }
+                };
+
+                let new_content = replace_line(&content, theme_line_below_index, &theme_module);
+
+                save_file(&init_lua_path, new_content);
+            } else {
+                println!("Error: Anchor comment not found in the init.lua file.");
+            }
+        }
+        Err(_) => {
+            println!("Warning: File {} not found", &init_lua_path);
+        }
+    }
 }
 
 fn save_file(file_path: &str, content: String) {
