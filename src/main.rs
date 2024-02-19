@@ -296,7 +296,10 @@ fn load_available_themes(home_path: &str) -> Vec<String> {
 
     for path in paths {
         let path = path.expect("Invalid path");
-        themes.push(path.file_name().into_string().expect("invalid filename"))
+        let filename = path.file_name().into_string().expect("invalid filename");
+        if filename != "font.toml" {
+            themes.push(path.file_name().into_string().expect("invalid filename"))
+        }
     }
 
     return themes;
