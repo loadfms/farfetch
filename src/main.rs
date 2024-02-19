@@ -229,6 +229,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "tokyo-night.toml" => "tokyonight-moon",
         "kanagawa.toml" => "kanagawa",
         "everforest.toml" => "everforest",
+        "poimandres.toml" => "poimandres",
         _ => "",
     };
 
@@ -262,6 +263,9 @@ fn replace_init_lua_theme(home_path: &str, selection: &str) {
                     "kanagawa.toml" => r#"    { "rebelot/kanagawa.nvim" },"#,
                     "everforest.toml" => {
                         r#"    {"neanias/everforest-nvim", version = false, lazy = false, priority = 1000 },"#
+                    }
+                    "poimandres.toml" => {
+                        r#"    { "olivercederborg/poimandres.nvim", priority = 1000 },"#
                     }
                     _ => {
                         // Default case or handle other themes as needed
