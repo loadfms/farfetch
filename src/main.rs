@@ -230,6 +230,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "kanagawa.toml" => "kanagawa",
         "everforest.toml" => "everforest",
         "poimandres.toml" => "poimandres",
+        "nord.toml" => "nord",
         _ => "",
     };
 
@@ -254,6 +255,7 @@ fn replace_init_lua_theme(home_path: &str, selection: &str) {
                         r#"    { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },"#
                     }
                     "rose-pine-moon.toml" => r#"{ "rose-pine/neovim", name = "rose-pine" },"#,
+                    "nord.toml" => r#"{ "shaunsingh/nord.nvim" },"#,
                     "catppuccin.toml" => {
                         r#"    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },"#
                     }
