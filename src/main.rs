@@ -63,10 +63,7 @@ fn show_polybar_options() -> usize {
 fn replace_alacritty(home_path: &str, selection: &str) -> HashMap<String, String> {
     let alacritty_path = format!("{}/.alacritty.toml", home_path);
     let string_to_find = "~/.alacrittythemes/";
-    let new_line_content = format!(
-        "import = [\"~/.alacrittythemes/{}\", \"~/.alacrittythemes/font.toml\"]",
-        selection
-    );
+    let new_line_content = format!("import = [\"~/.alacrittythemes/{}\"]", selection);
 
     change_config_value(&alacritty_path, string_to_find, &new_line_content);
 
@@ -223,7 +220,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
     let string_to_find_theme = "vim.cmd.colorscheme";
 
     let theme = match selection {
-        "rose-pine-moon.toml" => "rose-pine",
+        "rose-pine-moon.toml" => "rose-pine-main",
         "catppuccin.toml" => "catppuccin",
         "gruvbox.toml" => "gruvbox",
         "tokyo-night.toml" => "tokyonight-moon",
@@ -231,6 +228,8 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "everforest.toml" => "everforest",
         "poimandres.toml" => "poimandres",
         "nord.toml" => "nord",
+        "zenbones.toml" => "zenbones",
+        "dracula.toml" => "dracula",
         _ => "",
     };
 
@@ -269,6 +268,10 @@ fn replace_init_lua_theme(home_path: &str, selection: &str) {
                     "poimandres.toml" => {
                         r#"    { "olivercederborg/poimandres.nvim", priority = 1000 },"#
                     }
+                    "zenbones.toml" => {
+                        r#"    { "mcchrish/zenbones.nvim", dependencies = "rktjmp/lush.nvim" },"#
+                    }
+                    "dracula.toml" => r#"    { "Mofiqul/dracula.nvim" },"#,
                     _ => {
                         // Default case or handle other themes as needed
                         ""
