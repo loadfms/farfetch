@@ -223,6 +223,7 @@ fn replace_nvim_theme(home_path: &str, selection: &str) {
         "rose-pine-moon.toml" => "rose-pine-main",
         "catppuccin.toml" => "catppuccin",
         "gruvbox.toml" => "gruvbox",
+        "gruvbox-material.toml" => "gruvbox-material",
         "tokyo-night.toml" => "tokyonight-moon",
         "kanagawa.toml" => "kanagawa",
         "everforest.toml" => "everforest",
@@ -253,6 +254,7 @@ fn replace_init_lua_theme(home_path: &str, selection: &str) {
                     "gruvbox.toml" => {
                         r#"    { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = ... },"#
                     }
+                    "gruvbox-material.toml" => r#"    { "sainnhe/gruvbox-material" },"#,
                     "rose-pine-moon.toml" => r#"{ "rose-pine/neovim", name = "rose-pine" },"#,
                     "nord.toml" => r#"{ "shaunsingh/nord.nvim" },"#,
                     "catppuccin.toml" => {
